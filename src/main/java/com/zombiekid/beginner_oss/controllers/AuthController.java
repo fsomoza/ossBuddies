@@ -1,5 +1,7 @@
 package com.zombiekid.beginner_oss.controllers;
 
+import com.zombiekid.beginner_oss.entitities.UserEntity;
+import com.zombiekid.beginner_oss.repositories.JpaUserRepository;
 import com.zombiekid.beginner_oss.security.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -24,8 +26,9 @@ public class AuthController {
     @Autowired
     private UserDetailsServiceImpl userDetailsService;
 
+
     @Autowired
-    private TokenBlacklist tokenBlacklist;
+    private JpaUserRepository userRepository;
 
     // Authenticate user
     @PostMapping("/authenticate")
@@ -58,8 +61,12 @@ public class AuthController {
     public ResponseEntity<?> logout(@RequestHeader("Authorization") String authorizationHeader) {
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             String jwt = authorizationHeader.substring(7);
-            String tokenId = jwtUtil.extractTokenId(jwt);
-            tokenBlacklist.add(tokenId);
+            String username = jwtUtil.extractUsername(jwt);
+
+            // Increment tokenVersion in the database
+            UserEntity user = userRepository.findByUsername(username);
+            user.incrementTokenVersion();
+            userRepository.save(user);
         }
         return ResponseEntity.ok("Logged out successfully");
     }

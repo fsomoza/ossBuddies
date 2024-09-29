@@ -15,6 +15,8 @@ public class UserEntity {
     private String name;
     private String email;
     private String password;
+
+    private int tokenVersion = 0;
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<RoleEntity> roles;
 
@@ -92,5 +94,17 @@ public class UserEntity {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public int getTokenVersion() {
+        return tokenVersion;
+    }
+
+    public void setTokenVersion(int tokenVersion) {
+        this.tokenVersion = tokenVersion;
+    }
+
+    public void incrementTokenVersion() {
+        this.tokenVersion++;
     }
 }
