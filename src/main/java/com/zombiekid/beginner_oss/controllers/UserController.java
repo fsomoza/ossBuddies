@@ -1,7 +1,8 @@
-package com.zombiekid.beginner_oss.shared.infrastracture.controllers;
+package com.zombiekid.beginner_oss.controllers;
 
-import com.zombiekid.beginner_oss.shared.infrastracture.authentication.UserService;
-import com.zombiekid.beginner_oss.user.domain.model.User;
+import com.zombiekid.beginner_oss.services.UserService;
+import com.zombiekid.beginner_oss.services.UserServiceImpl;
+import com.zombiekid.beginner_oss.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

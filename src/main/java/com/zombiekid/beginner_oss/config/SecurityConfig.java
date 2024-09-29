@@ -1,5 +1,7 @@
-package com.zombiekid.beginner_oss.shared.infrastracture.authentication;
+package com.zombiekid.beginner_oss.config;
 
+import com.zombiekid.beginner_oss.security.JwtRequestFilter;
+import com.zombiekid.beginner_oss.security.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -62,7 +64,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/authenticate", "/register", "/h2-console/**").permitAll()
+                        .requestMatchers("/authenticate", "/register", "/logout" ,"/h2-console/**").permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )

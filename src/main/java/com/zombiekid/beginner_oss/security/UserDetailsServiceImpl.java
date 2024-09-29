@@ -1,7 +1,8 @@
-package com.zombiekid.beginner_oss.shared.infrastracture.authentication;
+package com.zombiekid.beginner_oss.security;
 
-import com.zombiekid.beginner_oss.user.domain.model.User;
-import com.zombiekid.beginner_oss.user.infratracture.repositories.JpaUserRepositoryAdapter;
+import com.zombiekid.beginner_oss.entitities.UserEntity;
+import com.zombiekid.beginner_oss.models.User;
+import com.zombiekid.beginner_oss.repositories.JpaUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -17,12 +18,15 @@ import java.util.stream.Collectors;
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Autowired
-    private JpaUserRepositoryAdapter userRepository;
+    private JpaUserRepository userRepository;
 
     // Load user by username
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUsername(username);
+
+        //TODO
+        // CUBRIR LA CASUISTICA EN LA QUE EXISTE MAS DE UN USUARIO CON EL MISMO NOMBRE
+        UserEntity user = userRepository.findByUsername(username);
 
         if (user == null) {
             throw new UsernameNotFoundException("User not found");
@@ -34,6 +38,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 .collect(Collectors.toSet());
 
         return new org.springframework.security.core.userdetails.User(
-                user.getUserName(), user.getPassword(), authorities);
+                user.getName(), user.getPassword(), authorities);
     }
 }

@@ -1,7 +1,6 @@
-package com.zombiekid.beginner_oss.user.domain.model;
+package com.zombiekid.beginner_oss.models;
 
 import java.util.Set;
-import java.util.UUID;
 
 public class User {
     private Long id;

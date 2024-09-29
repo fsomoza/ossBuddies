@@ -1,9 +1,6 @@
-package com.zombiekid.beginner_oss.shared.infrastracture.controllers;
+package com.zombiekid.beginner_oss.controllers;
 
-import com.zombiekid.beginner_oss.shared.infrastracture.authentication.AuthRequest;
-import com.zombiekid.beginner_oss.shared.infrastracture.authentication.AuthResponse;
-import com.zombiekid.beginner_oss.shared.infrastracture.authentication.JwtUtil;
-import com.zombiekid.beginner_oss.shared.infrastracture.authentication.UserDetailsServiceImpl;
+import com.zombiekid.beginner_oss.security.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -12,6 +9,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -25,6 +23,9 @@ public class AuthController {
 
     @Autowired
     private UserDetailsServiceImpl userDetailsService;
+
+    @Autowired
+    private TokenBlacklist tokenBlacklist;
 
     // Authenticate user
     @PostMapping("/authenticate")
@@ -50,5 +51,19 @@ public class AuthController {
 
         return ResponseEntity.ok(new AuthResponse(jwt));
     }
+
+    //TODO
+    //TENGO QUE PONERLE ESTE NOMBRE PARA QUE NO SEA EL MISMO QUE EL DE SPRING
+    @PostMapping("api/logout")
+    public ResponseEntity<?> logout(@RequestHeader("Authorization") String authorizationHeader) {
+        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+            String jwt = authorizationHeader.substring(7);
+            String tokenId = jwtUtil.extractTokenId(jwt);
+            tokenBlacklist.add(tokenId);
+        }
+        return ResponseEntity.ok("Logged out successfully");
+    }
+
+
 }
 

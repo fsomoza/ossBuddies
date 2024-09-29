@@ -1,4 +1,4 @@
-package com.zombiekid.beginner_oss.user.infratracture.entities;
+package com.zombiekid.beginner_oss.entitities;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;

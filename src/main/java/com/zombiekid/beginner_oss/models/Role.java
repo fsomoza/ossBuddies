@@ -1,4 +1,4 @@
-package com.zombiekid.beginner_oss.user.domain.model;
+package com.zombiekid.beginner_oss.models;
 
 public class Role {
 

@@ -1,4 +1,4 @@
-package com.zombiekid.beginner_oss.shared.infrastracture.authentication;
+package com.zombiekid.beginner_oss.security;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -21,6 +21,9 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     @Autowired
     private JwtUtil jwtUtil;
 
+    @Autowired
+    private TokenBlacklist tokenBlacklist;
+
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
@@ -30,15 +33,24 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
         String username = null;
         String jwt = null;
+        String tokenId = null;
 
         // Extract JWT token from the Authorization header
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             jwt = authorizationHeader.substring(7);
+            tokenId = jwtUtil.extractTokenId(jwt); // Extract the token ID
             try {
                 username = jwtUtil.extractUsername(jwt);
             } catch (Exception e) {
                 // Handle exception
             }
+        }
+
+        // Check if the token is blacklisted
+        if (tokenId != null && tokenBlacklist.contains(tokenId)) {
+            // Token is blacklisted, do not authenticate
+            chain.doFilter(request, response);
+            return;
         }
 
         // Validate token and set authentication

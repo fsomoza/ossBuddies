@@ -1,4 +1,4 @@
-package com.zombiekid.beginner_oss.shared.infrastracture.authentication;
+package com.zombiekid.beginner_oss.security;
 
 public class AuthResponse {
     private String jwt;

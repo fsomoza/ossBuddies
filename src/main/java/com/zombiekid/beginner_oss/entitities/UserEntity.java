@@ -1,11 +1,10 @@
-package com.zombiekid.beginner_oss.user.infratracture.entities;
+package com.zombiekid.beginner_oss.entitities;
 
-import com.zombiekid.beginner_oss.user.domain.model.Role;
-import com.zombiekid.beginner_oss.user.domain.model.User;
+import com.zombiekid.beginner_oss.models.Role;
+import com.zombiekid.beginner_oss.models.User;
 import jakarta.persistence.*;
 
 import java.util.Set;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Entity
