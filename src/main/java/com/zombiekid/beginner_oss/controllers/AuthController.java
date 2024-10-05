@@ -46,7 +46,19 @@ public class AuthController {
             final UserDetails userDetails = userDetailsService
                     .loadUserByUsername(authRequest.getUsername());
 
+
+            UserEntity user = userRepository.findByUsername(authRequest.getUsername());
+            if (user != null) {
+                user.incrementTokenVersion();
+                userRepository.save(user);
+            }
+
+
             jwt = jwtUtil.generateToken(userDetails);
+
+
+
+
         }catch (Exception e) {
             throw new Exception("User not found", e);
         }
